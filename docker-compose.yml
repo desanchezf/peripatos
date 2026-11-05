@@ -1,0 +1,302 @@
+# Profiles: local | production
+#
+# Local (sin nginx):
+#   docker compose --profile local up -d --build
+#
+# Producción (con nginx):
+#   COMPOSE_PROFILES=production
+#   DJANGO_ENV=production DEBUG=0 ENTRYPOINT_SCRIPT=entrypoint.prod.sh
+#   docker compose --profile production up -d --build
+
+name: django-template
+
+x-no-privileges: &no-privileges
+  security_opt:
+    - no-new-privileges:true
+
+services:
+  redis:
+    image: redis:7.4-alpine
+    container_name: django-template-redis
+    profiles: ["local", "production"]
+    <<: *no-privileges
+    cap_drop:
+      - ALL
+    command:
+      - redis-server
+      - /usr/local/etc/redis/redis.conf
+      - --requirepass
+      - ${REDIS_PASSWORD:-changeme}
+    volumes:
+      - redis_data:/data
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
+    expose:
+      - "6379"
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-changeme}", "--no-auth-warning", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+    mem_limit: 256m
+    mem_reservation: 64m
+
+  postgres:
+    image: postgres:16.6-alpine
+    container_name: django-template-postgres
+    profiles: ["local", "production"]
+    <<: *no-privileges
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - DAC_OVERRIDE
+      - FOWNER
+      - SETGID
+      - SETUID
+    # Solo variables necesarias (no filtrar SECRET_KEY al contenedor DB)
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-postgres}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    expose:
+      - "5432"
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+    mem_limit: 512m
+    mem_reservation: 128m
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: django-template-backend
+    profiles: ["local", "production"]
+    <<: *no-privileges
+    cap_drop:
+      - ALL
+    command: sh ${ENTRYPOINT_SCRIPT:-entrypoint.sh}
+    # Solo accesible desde el host local (no en 0.0.0.0)
+    ports:
+      - "127.0.0.1:8000:8000"
+    env_file:
+      - .env
+    environment:
+      DJANGO_ENV: ${DJANGO_ENV:-local}
+      POSTGRES_HOST: postgres
+      REDIS_URL: ${REDIS_URL:-redis://:${REDIS_PASSWORD:-changeme}@redis:6379/0}
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL:-redis://:${REDIS_PASSWORD:-changeme}@redis:6379/0}
+    volumes:
+      - .:/code
+      - media_data:/code/media
+      - static_data:/code/staticfiles
+    tmpfs:
+      - /tmp:mode=1777,size=64m
+      - /dev/shm:size=256m
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - frontend
+      - backend
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8000/admin/login/"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+    restart: unless-stopped
+    mem_limit: 2g
+    mem_reservation: 512m
+
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: django-template-celery-worker
+    profiles: ["local", "production"]
+    <<: *no-privileges
+    cap_drop:
+      - ALL
+    command: celery -A project worker -l info --concurrency=${CELERY_CONCURRENCY:-2}
+    env_file:
+      - .env
+    environment:
+      DJANGO_ENV: ${DJANGO_ENV:-local}
+      POSTGRES_HOST: postgres
+      REDIS_URL: ${REDIS_URL:-redis://:${REDIS_PASSWORD:-changeme}@redis:6379/0}
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL:-redis://:${REDIS_PASSWORD:-changeme}@redis:6379/0}
+    volumes:
+      - .:/code
+      - media_data:/code/media
+      - static_data:/code/staticfiles
+    tmpfs:
+      - /tmp:mode=1777,size=64m
+      - /dev/shm:size=128m
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      backend:
+        condition: service_healthy
+    networks:
+      - backend
+    restart: unless-stopped
+    mem_limit: 1g
+    mem_reservation: 256m
+
+  celery-beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: django-template-celery-beat
+    profiles: ["local", "production"]
+    <<: *no-privileges
+    cap_drop:
+      - ALL
+    command: celery -A project beat -l info --schedule=/tmp/celerybeat-schedule
+    env_file:
+      - .env
+    environment:
+      DJANGO_ENV: ${DJANGO_ENV:-local}
+      POSTGRES_HOST: postgres
+      REDIS_URL: ${REDIS_URL:-redis://:${REDIS_PASSWORD:-changeme}@redis:6379/0}
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL:-redis://:${REDIS_PASSWORD:-changeme}@redis:6379/0}
+    volumes:
+      - .:/code
+      - media_data:/code/media
+      - static_data:/code/staticfiles
+    tmpfs:
+      - /tmp:mode=1777,size=32m
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      backend:
+        condition: service_healthy
+    networks:
+      - backend
+    restart: unless-stopped
+    mem_limit: 256m
+    mem_reservation: 64m
+
+  prometheus:
+    image: prom/prometheus:v2.52.0
+    container_name: django-template-prometheus
+    profiles: ["local", "production"]
+    <<: *no-privileges
+    cap_drop:
+      - ALL
+    ports:
+      - "127.0.0.1:9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    depends_on:
+      backend:
+        condition: service_started
+    networks:
+      - frontend
+      - backend
+    restart: unless-stopped
+    mem_limit: 512m
+    mem_reservation: 128m
+
+  grafana:
+    image: grafana/grafana:11.3.0
+    container_name: django-template-grafana
+    profiles: ["local", "production"]
+    <<: *no-privileges
+    cap_drop:
+      - ALL
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GF_SECURITY_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GF_SECURITY_ADMIN_PASSWORD:-changeme}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_SECURITY_DISABLE_GRAVATAR: "true"
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+      GF_INSTALL_PLUGINS: ""
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+    depends_on:
+      - prometheus
+    networks:
+      - frontend
+    restart: unless-stopped
+    mem_limit: 256m
+    mem_reservation: 64m
+
+  # Solo production: único servicio publicado hacia fuera (0.0.0.0)
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: django-template-nginx
+    profiles: ["production"]
+    <<: *no-privileges
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+      - CHOWN
+      - SETGID
+      - SETUID
+      - DAC_OVERRIDE
+    ports:
+      - "${HTTP_PORT:-80}:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - static_data:/code/staticfiles:ro
+      - media_data:/code/media:ro
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - frontend
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    mem_limit: 128m
+    mem_reservation: 32m
+
+networks:
+  frontend:
+    driver: bridge
+  # Postgres + Redis: sin salida a Internet
+  backend:
+    driver: bridge
+    internal: true
+
+volumes:
+  postgres_data:
+  redis_data:
+  prometheus_data:
+  grafana_data:
+  media_data:
+  static_data:

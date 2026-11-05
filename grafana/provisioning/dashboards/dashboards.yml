@@ -1,0 +1,14 @@
+# Carga dashboards desde la carpeta default al arrancar Grafana.
+apiVersion: 1
+
+providers:
+  - name: default
+    orgId: 1
+    folder: Django Template
+    folderUid: django-template
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 30
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards/default
