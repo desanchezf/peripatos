@@ -7,7 +7,7 @@ import os, sys
 import psycopg2
 try:
     psycopg2.connect(
-        dbname=os.environ.get('POSTGRES_DB', 'postgres'),
+        dbname=os.environ.get('POSTGRES_DB', 'peripatos'),
         user=os.environ.get('POSTGRES_USER', 'postgres'),
         password=os.environ.get('POSTGRES_PASSWORD', 'postgres'),
         host=os.environ.get('POSTGRES_HOST', 'postgres'),
@@ -31,7 +31,7 @@ WORKERS="${GUNICORN_WORKERS:-4}"
 THREADS="${GUNICORN_THREADS:-2}"
 TIMEOUT="${GUNICORN_TIMEOUT:-60}"
 
-exec gunicorn project.wsgi:application \
+exec gunicorn peripatos.wsgi:application \
   --bind 0.0.0.0:8000 \
   --workers "$WORKERS" \
   --threads "$THREADS" \

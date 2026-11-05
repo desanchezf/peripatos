@@ -1,5 +1,5 @@
 """
-Django settings for project.
+Django settings for Peripatos.
 
 Variables de entorno: ver .env.example
 DJANGO_ENV=local|production controla ajustes de seguridad y estáticos.
@@ -54,7 +54,10 @@ INSTALLED_APPS = [
     "django_celery_beat",
     "django_celery_results",
     "django_prometheus",
-    "project_commands",
+    "peripatos_commands",
+    "theory",
+    "quizzes",
+    "labs",
 ]
 
 MIDDLEWARE = [
@@ -71,7 +74,7 @@ MIDDLEWARE = [
     "django_prometheus.middleware.PrometheusAfterMiddleware",
 ]
 
-ROOT_URLCONF = "project.urls"
+ROOT_URLCONF = "peripatos.urls"
 
 TEMPLATES = [
     {
@@ -89,14 +92,14 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "project.wsgi.application"
+WSGI_APPLICATION = "peripatos.wsgi.application"
 
 
 # Database — varias conexiones concurrentes (usuarios simultáneos)
 DATABASES = {
     "default": {
         "ENGINE": "django_prometheus.db.backends.postgresql",
-        "NAME": os.environ.get("POSTGRES_DB", "postgres"),
+        "NAME": os.environ.get("POSTGRES_DB", "peripatos"),
         "USER": os.environ.get("POSTGRES_USER", "postgres"),
         "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "postgres"),
         "HOST": os.environ.get("POSTGRES_HOST", "postgres"),
@@ -124,12 +127,14 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "")
+ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "")
 ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", "")
+MAIN_USER_PASS = os.getenv("MAIN_USER_PASS", "")
 ADMIN_GROUPS = [g for g in os.getenv("ADMIN_GROUPS", "").split(",") if g]
 ROLE_PERMISSIONS = {
-    "owner": [],
+    "admin": [],
+    "student": [],
 }
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = ["bootstrap5"]
@@ -173,7 +178,7 @@ CACHES = {
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },
-        "KEY_PREFIX": "django_template",
+        "KEY_PREFIX": "peripatos",
     }
 }
 

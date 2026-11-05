@@ -7,7 +7,7 @@ import os, sys
 import psycopg2
 try:
     psycopg2.connect(
-        dbname=os.environ.get('POSTGRES_DB', 'postgres'),
+        dbname=os.environ.get('POSTGRES_DB', 'peripatos'),
         user=os.environ.get('POSTGRES_USER', 'postgres'),
         password=os.environ.get('POSTGRES_PASSWORD', 'postgres'),
         host=os.environ.get('POSTGRES_HOST', 'postgres'),
@@ -20,6 +20,8 @@ except Exception as e:
   echo "Postgres no listo; reintentando en 2s..."
   sleep 2
 done
+
+python manage.py migrate --noinput
 
 echo "Ejecutando initsetup..."
 until python ./manage.py initsetup; do

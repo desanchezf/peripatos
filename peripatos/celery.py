@@ -2,10 +2,10 @@ import os
 from celery import Celery
 
 # Configurar Django settings
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "peripatos.settings")
 
 # Crear instancia de Celery
-app = Celery("project")
+app = Celery("peripatos")
 
 # Configurar Celery usando Django settings
 app.config_from_object("django.conf:settings", namespace="CELERY")
