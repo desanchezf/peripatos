@@ -1,0 +1,4 @@
+{% extends "registration/base.html" %}
+{# Extiende la plantilla de Jazzmin del mismo nombre (login y cierre de sesión) #}
+
+{% block extrahead %}{{ block.super }}{% include "admin/theme_head.html" %}{% endblock %}

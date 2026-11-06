@@ -1,0 +1,9 @@
+{% extends "rest_framework/base.html" %}
+{% load static %}
+{# API navegable con el tema del frontal. Sin selector: usa el elegido en el frontal o el admin #}
+
+{% block title %}{% if name %}{{ name }} – {% endif %}Peripatos API{% endblock %}
+
+{% block style %}{{ block.super }}{% include "admin/theme_base.html" %}<link rel="stylesheet" href="{% static 'peripatos-admin/api.css' %}">{% endblock %}
+
+{% block branding %}<a class="navbar-brand" rel="nofollow" href="/">Peripatos API</a>{% endblock %}

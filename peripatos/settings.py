@@ -33,6 +33,9 @@ CSRF_TRUSTED_ORIGINS = [
     for o in os.environ.get("CSRF_TRUSTED_ORIGINS", "").split(",")
     if o.strip()
 ]
+if not IS_PROD:
+    # Frontal de Vite: el navegador envía este origen y su proxy cambia el Host
+    CSRF_TRUSTED_ORIGINS += ["http://localhost:5174", "http://127.0.0.1:5174"]
 
 
 # Application definition
@@ -58,6 +61,9 @@ INSTALLED_APPS = [
     "theory",
     "quizzes",
     "labs",
+    "roadmap",
+    "dashboard",
+    "assistant",
 ]
 
 MIDDLEWARE = [
@@ -79,7 +85,7 @@ ROOT_URLCONF = "peripatos.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -150,6 +156,8 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 20,
+    "DEFAULT_THROTTLE_CLASSES": ["rest_framework.throttling.ScopedRateThrottle"],
+    "DEFAULT_THROTTLE_RATES": {"login": "10/min", "assistant": "20/min"},
     "DEFAULT_FILTER_BACKENDS": [
         "rest_framework.filters.SearchFilter",
         "rest_framework.filters.OrderingFilter",
@@ -198,20 +206,88 @@ CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = TIME_ZONE
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 
+# Asistente. Sin API key, los modelos de Claude no se ofrecen
+ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
+OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://ollama:11434")
+
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_DIRS = [BASE_DIR / "static"] if (BASE_DIR / "static").exists() else []
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+    # Tokens del frontal (/static/nt/tokens.css): el admin usa la misma paleta
+    ("nt", BASE_DIR / "frontend" / "src" / "styles"),
+]
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+PRIVATE_ROOT = BASE_DIR / "private"
 
 STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
+    "private": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "OPTIONS": {"location": PRIVATE_ROOT, "base_url": "/private/"},
+    },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"
         if IS_PROD
         else "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
+
+# Admin (Jazzmin). Los colores salen de static/peripatos-admin/admin.css con los tokens del frontal
+JAZZMIN_SETTINGS = {
+    "site_title": "Peripatos",
+    "site_header": "Peripatos",
+    "site_brand": "Peripatos",
+    "site_icon": "logo/peripatos.svg",
+    "site_logo": "logo/peripatos.svg",
+    "login_logo": "logo/peripatos.svg",
+    "welcome_sign": "Inicia sesión en la administración",
+    "copyright": "Peripatos",
+    "use_google_fonts_cdn": False,  # las fuentes del frontal se cargan en templates/admin
+    "show_ui_builder": False,
+    # Font Awesome 6 Free (el que trae Jazzmin)
+    "icons": {
+        "auth.group": "fas fa-users",
+        "auth.user": "fas fa-user",
+        "authtoken.tokenproxy": "fas fa-key",
+        "django_celery_results.groupresult": "fas fa-layer-group",
+        "django_celery_results.taskresult": "fas fa-clipboard-check",
+        "django_celery_beat.periodictask": "fas fa-arrows-rotate",
+        "django_celery_beat.clockedschedule": "fas fa-clock",
+        "django_celery_beat.crontabschedule": "fas fa-calendar-days",
+        "django_celery_beat.intervalschedule": "fas fa-stopwatch",
+        "django_celery_beat.solarschedule": "fas fa-sun",
+        "theory.material": "fas fa-book-open",
+        "quizzes.topic": "fas fa-tags",
+        "quizzes.quiz": "fas fa-clipboard-question",
+        "quizzes.question": "fas fa-circle-question",
+        "quizzes.attempt": "fas fa-list-check",
+        "labs.lab": "fas fa-flask",
+        "labs.submission": "fas fa-file-arrow-up",
+        "roadmap.training": "fas fa-route",
+        "roadmap.careerpath": "fas fa-signs-post",
+        "roadmap.pathstage": "fas fa-layer-group",
+        "dashboard.notice": "fas fa-bell",
+        "assistant.llmmodel": "fas fa-microchip",
+    },
+}
+JAZZMIN_UI_TWEAKS = {
+    "theme": "default",
+    "default_theme_mode": "light",  # el modo real lo decide el tema elegido (nt-theme)
+    "navbar": "",
+    "sidebar": "",
+    "brand_colour": "",
+    "accent": "",
+    "button_classes": {
+        "primary": "btn-primary",
+        "secondary": "btn-secondary",
+        "info": "btn-secondary",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-primary",  # «Guardar» y «Añadir» son la acción principal de cada vista
     },
 }
 

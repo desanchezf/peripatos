@@ -78,3 +78,9 @@ nginx/
 docker-compose*.yml
 prometheus/
 grafana/
+
+# Frontal y ficheros privados (tienen su propio contenedor y volumen)
+frontend/
+# Los tokens de color sí: el admin los sirve como /static/nt/
+!frontend/src/styles/
+private/

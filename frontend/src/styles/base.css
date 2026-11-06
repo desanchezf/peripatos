@@ -1,0 +1,19 @@
+/* Reset mínimo. El body (fuente, fondo y color) está en components.css */
+*, *::before, *::after { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+h1, h2, h3, h4, p, ul, ol, figure { margin: 0; }
+button, input, select, textarea { font: inherit; color: inherit; }
+img, svg, video { max-width: 100%; }
+a { color: var(--link); }
+:focus-visible { outline: 2px solid transparent; box-shadow: var(--focus-ring); }
+::selection { background: var(--highlight); color: var(--ink); }
+
+/* Texto solo para lectores de pantalla */
+.nt-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* Transiciones de 120–160 ms en hover y paneles */
+.nt-btn, .nt-iconbtn, .nt-nav, .nt-tree, .nt-tab, .nt-service, .nt-chip-x, .nt-theme-opt { transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0ms !important; animation-duration: 0ms !important; scroll-behavior: auto !important; }
+}

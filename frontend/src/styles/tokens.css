@@ -1,0 +1,275 @@
+/* tokens.css — generado desde el Design System "Plataforma de Notas". No editar a mano: cambia tokens.json. */
+
+:root,
+[data-theme="lava-light"] {
+  --lava-molten-lava: #780000;
+  --lava-brick-red: #c1121f;
+  --lava-steel-blue: #669bbc;
+  --lava-papaya-whip: #fdf0d5;
+  --lava-deep-space-blue: #003049;
+  --citrus-princeton-orange: #fb8500;
+  --citrus-amber-flame: #ffb703;
+  --citrus-blue-green: #219ebc;
+  --citrus-sky-blue: #8ecae6;
+  --citrus-deep-space-blue: #023047;
+  --bloom-imperial-blue: #0a2463;
+  --bloom-blue-bell: #3e92cc;
+  --bloom-magenta-bloom: #d8315b;
+  --bloom-ghost-white: #fffaff;
+  --bloom-carbon-black: #1e1b18;
+  --bg: #fdf0d5;
+  --surface: #f8e6c3;
+  --surface-raised: #fffaf0;
+  --surface-sunken: #f3ddb2;
+  --surface-hover: #f1dcb4;
+  --line: #e8d3aa;
+  --line-strong: #8c7a5c;
+  --ink: #003049;
+  --ink-muted: #4a5d68;
+  --accent: #c1121f;
+  --accent-hover: #780000;
+  --accent-soft: #f7d4c8;
+  --on-accent: #fffaf0;
+  --accent-ink: #a50f1a;
+  --secondary: #669bbc;
+  --secondary-soft: #d9e6ee;
+  --on-secondary: #002236;
+  --secondary-ink: #2c5a78;
+  --highlight: #f5c9a8;
+  --danger: #a50f1a;
+  --danger-soft: #f7d4c8;
+  --warning: #8a4b00;
+  --warning-soft: #f6dfb0;
+  --success: #256b45;
+  --success-soft: #d6ead6;
+  --link: var(--accent-ink);
+  --link-external: var(--secondary-ink);
+  --graph-node: var(--ink-muted);
+  --graph-node-active: var(--accent);
+  --graph-edge: var(--line-strong);
+  --shadow-sm: 0 1px 2px #00304914, 0 1px 3px #0030491a;
+  --shadow-lg: 0 4px 10px #00304914, 0 16px 32px -6px #0030492e;
+  --focus-ring: 0 0 0 2px #fdf0d5, 0 0 0 4px #a50f1a;
+  color-scheme: light;
+}
+
+[data-theme="lava-dark"] {
+  --bg: #001d30;
+  --surface: #002740;
+  --surface-raised: #003049;
+  --surface-sunken: #00172a;
+  --surface-hover: #0a3a57;
+  --line: #123f5b;
+  --line-strong: #5f8299;
+  --ink: #fdf0d5;
+  --ink-muted: #b7c3c9;
+  --accent: #c1121f;
+  --accent-hover: #a50f1a;
+  --accent-soft: #3d1420;
+  --on-accent: #fdf0d5;
+  --accent-ink: #ff8f86;
+  --secondary: #669bbc;
+  --secondary-soft: #113b56;
+  --on-secondary: #001d30;
+  --secondary-ink: #8fbad6;
+  --highlight: #5a2a1e;
+  --danger: #ff8f86;
+  --danger-soft: #3d1420;
+  --warning: #f5c46b;
+  --warning-soft: #3a2e10;
+  --success: #7fd1a0;
+  --success-soft: #10352a;
+  --link: var(--accent-ink);
+  --link-external: var(--secondary-ink);
+  --graph-node: var(--ink-muted);
+  --graph-node-active: var(--accent);
+  --graph-edge: var(--line-strong);
+  --shadow-sm: 0 1px 3px #00000099;
+  --shadow-lg: 0 12px 32px -4px #000000b3, 0 2px 6px #00000066;
+  --focus-ring: 0 0 0 2px #001d30, 0 0 0 4px #ff8f86;
+  color-scheme: dark;
+}
+
+[data-theme="citrus-light"] {
+  --bg: #f6fbfd;
+  --surface: #e8f4fa;
+  --surface-raised: #ffffff;
+  --surface-sunken: #dcedf6;
+  --surface-hover: #d6eaf4;
+  --line: #cfe3ee;
+  --line-strong: #5f8193;
+  --ink: #023047;
+  --ink-muted: #3f5d6c;
+  --accent: #fb8500;
+  --accent-hover: #ff9a1f;
+  --accent-soft: #ffe7c7;
+  --on-accent: #023047;
+  --accent-ink: #9a4a00;
+  --secondary: #219ebc;
+  --secondary-soft: #d3edf6;
+  --on-secondary: #012030;
+  --secondary-ink: #0f6a82;
+  --highlight: #ffe08a;
+  --danger: #b3261e;
+  --danger-soft: #fbdcd8;
+  --warning: #8a5300;
+  --warning-soft: #fff0c2;
+  --success: #1f6e4a;
+  --success-soft: #d5eee0;
+  --link: var(--accent-ink);
+  --link-external: var(--secondary-ink);
+  --graph-node: var(--ink-muted);
+  --graph-node-active: var(--accent);
+  --graph-edge: var(--line-strong);
+  --shadow-sm: 0 1px 2px #02304714, 0 1px 3px #0230471a;
+  --shadow-lg: 0 4px 10px #02304714, 0 16px 32px -6px #0230472e;
+  --focus-ring: 0 0 0 2px #f6fbfd, 0 0 0 4px #9a4a00;
+  color-scheme: light;
+}
+
+[data-theme="citrus-dark"] {
+  --bg: #011c2c;
+  --surface: #022539;
+  --surface-raised: #023047;
+  --surface-sunken: #011624;
+  --surface-hover: #0a3d57;
+  --line: #12425a;
+  --line-strong: #5b8aa2;
+  --ink: #eef7fb;
+  --ink-muted: #a9c3cf;
+  --accent: #fb8500;
+  --accent-hover: #ffb703;
+  --accent-soft: #3b2608;
+  --on-accent: #011c2c;
+  --accent-ink: #ffb703;
+  --secondary: #219ebc;
+  --secondary-soft: #0b3a4f;
+  --on-secondary: #011c2c;
+  --secondary-ink: #8ecae6;
+  --highlight: #4d3a06;
+  --danger: #ff8a80;
+  --danger-soft: #3f1a1a;
+  --warning: #ffb703;
+  --warning-soft: #3b2e08;
+  --success: #74d4a4;
+  --success-soft: #0d3a2c;
+  --link: var(--accent-ink);
+  --link-external: var(--secondary-ink);
+  --graph-node: var(--ink-muted);
+  --graph-node-active: var(--accent);
+  --graph-edge: var(--line-strong);
+  --shadow-sm: 0 1px 3px #00000099;
+  --shadow-lg: 0 12px 32px -4px #000000b3, 0 2px 6px #00000066;
+  --focus-ring: 0 0 0 2px #011c2c, 0 0 0 4px #ffb703;
+  color-scheme: dark;
+}
+
+[data-theme="bloom-light"] {
+  --bg: #fffaff;
+  --surface: #f5eff6;
+  --surface-raised: #ffffff;
+  --surface-sunken: #ede5ee;
+  --surface-hover: #ebe3ee;
+  --line: #e2d8e4;
+  --line-strong: #7d7385;
+  --ink: #1e1b18;
+  --ink-muted: #57515a;
+  --accent: #d8315b;
+  --accent-hover: #b8244b;
+  --accent-soft: #fadbe3;
+  --on-accent: #ffffff;
+  --accent-ink: #b01f47;
+  --secondary: #0a2463;
+  --secondary-soft: #dde6f6;
+  --on-secondary: #fffaff;
+  --secondary-ink: #0a2463;
+  --highlight: #f9d3de;
+  --danger: #b01f47;
+  --danger-soft: #fadbe3;
+  --warning: #8a4f00;
+  --warning-soft: #fbe9c8;
+  --success: #1f6b4c;
+  --success-soft: #d6ece2;
+  --link: var(--accent-ink);
+  --link-external: var(--secondary-ink);
+  --graph-node: var(--ink-muted);
+  --graph-node-active: var(--accent);
+  --graph-edge: var(--line-strong);
+  --shadow-sm: 0 1px 2px #1e1b1814, 0 1px 3px #1e1b181a;
+  --shadow-lg: 0 4px 10px #1e1b1814, 0 16px 32px -6px #1e1b182e;
+  --focus-ring: 0 0 0 2px #fffaff, 0 0 0 4px #b01f47;
+  color-scheme: light;
+}
+
+[data-theme="bloom-dark"] {
+  --bg: #141210;
+  --surface: #1e1b18;
+  --surface-raised: #29251f;
+  --surface-sunken: #0f0d0c;
+  --surface-hover: #332e28;
+  --line: #38322c;
+  --line-strong: #7e766c;
+  --ink: #fffaff;
+  --ink-muted: #bdb5b0;
+  --accent: #d8315b;
+  --accent-hover: #bf2650;
+  --accent-soft: #3d1522;
+  --on-accent: #ffffff;
+  --accent-ink: #f47d9b;
+  --secondary: #3e92cc;
+  --secondary-soft: #14283d;
+  --on-secondary: #0b0a09;
+  --secondary-ink: #7fb8e2;
+  --highlight: #4a1b2a;
+  --danger: #f47d9b;
+  --danger-soft: #3d1522;
+  --warning: #f2b85c;
+  --warning-soft: #3a2a12;
+  --success: #78cfa2;
+  --success-soft: #12332a;
+  --link: var(--accent-ink);
+  --link-external: var(--secondary-ink);
+  --graph-node: var(--ink-muted);
+  --graph-node-active: var(--accent);
+  --graph-edge: var(--line-strong);
+  --shadow-sm: 0 1px 3px #00000099;
+  --shadow-lg: 0 12px 32px -4px #000000b3, 0 2px 6px #00000066;
+  --focus-ring: 0 0 0 2px #141210, 0 0 0 4px #f47d9b;
+  color-scheme: dark;
+}
+
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+  --sidebar-width: 264px;
+  --assistant-width: 360px;
+  --topbar-height: 44px;
+  --reading-width: 720px;
+  --font-display: Poppins, "DM Sans", system-ui, sans-serif;
+  --font-sans: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+/* Estilos de texto */
+.t-display { font-family: var(--font-display); font-size: 40px; line-height: 48px; font-weight: 600; letter-spacing: -0.02em; }
+.t-title-1 { font-family: var(--font-display); font-size: 28px; line-height: 36px; font-weight: 600; letter-spacing: -0.01em; }
+.t-title-2 { font-family: var(--font-display); font-size: 21px; line-height: 28px; font-weight: 600; }
+.t-title-3 { font-family: var(--font-display); font-size: 17px; line-height: 24px; font-weight: 600; }
+.t-reading { font-family: var(--font-sans); font-size: 16px; line-height: 28px; font-weight: 400; }
+.t-body { font-family: var(--font-sans); font-size: 14px; line-height: 22px; font-weight: 400; }
+.t-label { font-family: var(--font-sans); font-size: 13px; line-height: 18px; font-weight: 500; }
+.t-caption { font-family: var(--font-sans); font-size: 12px; line-height: 16px; font-weight: 500; }
+.t-overline { font-family: var(--font-sans); font-size: 11px; line-height: 16px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+.t-code { font-family: var(--font-mono); font-size: 13px; line-height: 20px; font-weight: 400; }
+.t-numeric { font-family: var(--font-mono); font-size: 13px; line-height: 20px; font-weight: 500; font-variant-numeric: tabular-nums; }

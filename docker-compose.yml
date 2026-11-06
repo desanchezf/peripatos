@@ -3,6 +3,8 @@
 # Local (sin nginx):
 #   docker compose --profile local up -d --build
 #
+# Con modelos locales en el Asistente (Ollama, hasta 8 GB de RAM): añade --profile ollama
+#
 # Producción (con nginx):
 #   COMPOSE_PROFILES=production
 #   DJANGO_ENV=production DEBUG=0 ENTRYPOINT_SCRIPT=entrypoint.prod.sh
@@ -22,11 +24,8 @@ services:
     <<: *no-privileges
     cap_drop:
       - ALL
-    # La imagen arranca como root y cambia al usuario redis
-    cap_add:
-      - CHOWN
-      - SETGID
-      - SETUID
+    # Sin root ni capacidades: como root sin DAC_OVERRIDE, la imagen no arrancaba al reiniciar
+    user: redis
     command:
       - redis-server
       - /usr/local/etc/redis/redis.conf
@@ -101,12 +100,16 @@ services:
       POSTGRES_HOST: postgres
       REDIS_URL: ${REDIS_URL:-redis://:${REDIS_PASSWORD:-changeme}@redis:6379/0}
       CELERY_BROKER_URL: ${CELERY_BROKER_URL:-redis://:${REDIS_PASSWORD:-changeme}@redis:6379/0}
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://ollama:11434}
     volumes:
       - .:/code
       - media_data:/code/media
       - static_data:/code/staticfiles
+      # PDF, EPUB y entregas: fuera de /media, solo accesibles a través de la API
+      - private_data:/code/private
     tmpfs:
-      - /tmp:mode=1777,size=64m
+      # Django guarda aquí las subidas mientras llegan
+      - /tmp:mode=1777,size=256m
       - /dev/shm:size=256m
     depends_on:
       postgres:
@@ -125,6 +128,34 @@ services:
     restart: unless-stopped
     mem_limit: 2g
     mem_reservation: 512m
+
+  # Solo local: Vite con recarga en caliente. Mismo origen que la API a través de su proxy
+  frontend:
+    image: node:24-alpine
+    container_name: peripatos-frontend
+    profiles: ["local"]
+    <<: *no-privileges
+    cap_drop:
+      - ALL
+    # Mismo UID que el usuario del host: node_modules y package-lock.json quedan a su nombre
+    user: "1000:1000"
+    working_dir: /app
+    command: sh -c "npm install --no-fund --no-audit && npm run dev -- --host 0.0.0.0"
+    environment:
+      HOME: /tmp
+      BACKEND_URL: http://backend:8000
+    volumes:
+      - ./frontend:/app
+    # 5173 lo usa zero-toil en este equipo
+    ports:
+      - "127.0.0.1:5174:5173"
+    depends_on:
+      - backend
+    networks:
+      - frontend
+    restart: unless-stopped
+    # La compilación (npm run build) necesita más de 1 GB
+    mem_limit: 2g
 
   celery:
     build:
@@ -198,6 +229,56 @@ services:
     restart: unless-stopped
     mem_limit: 256m
     mem_reservation: 64m
+
+  # Opcional: modelos locales del Asistente. Descarga: docker exec peripatos-ollama ollama pull <modelo>
+  ollama:
+    image: ollama/ollama:0.40.15
+    container_name: peripatos-ollama
+    profiles: ["ollama"]
+    <<: *no-privileges
+    cap_drop:
+      - ALL
+    environment:
+      OLLAMA_KEEP_ALIVE: ${OLLAMA_KEEP_ALIVE:-10m}
+      # Sin salida directa a Internet: solo a través de ollama-egress, que únicamente deja descargar modelos
+      HTTPS_PROXY: http://ollama-egress:8888
+      HTTP_PROXY: http://ollama-egress:8888
+      # La CLI de Ollama (healthcheck, ollama pull) habla con su propio servidor en 0.0.0.0
+      NO_PROXY: localhost,127.0.0.1,0.0.0.0,ollama
+    volumes:
+      - ollama_data:/root/.ollama
+    expose:
+      - "11434"
+    networks:
+      - backend
+      - ollama-egress
+    depends_on:
+      - ollama-egress
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    mem_limit: ${OLLAMA_MEM_LIMIT:-8g}
+
+  # Proxy de salida de Ollama con lista blanca (ollama-egress/filter): el registro de modelos y nada más
+  ollama-egress:
+    build:
+      context: ./ollama-egress
+    container_name: peripatos-ollama-egress
+    profiles: ["ollama"]
+    <<: *no-privileges
+    cap_drop:
+      - ALL
+    read_only: true
+    expose:
+      - "8888"
+    networks:
+      - ollama-egress
+      - frontend
+    restart: unless-stopped
+    mem_limit: 64m
 
   prometheus:
     image: prom/prometheus:v2.52.0
@@ -297,6 +378,10 @@ networks:
   backend:
     driver: bridge
     internal: true
+  # Ollama y su proxy de salida: sin acceso directo a Internet
+  ollama-egress:
+    driver: bridge
+    internal: true
 
 volumes:
   postgres_data:
@@ -305,3 +390,5 @@ volumes:
   grafana_data:
   media_data:
   static_data:
+  private_data:
+  ollama_data:

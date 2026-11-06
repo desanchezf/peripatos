@@ -1,0 +1,55 @@
+/*
+ * API navegable de DRF (Bootstrap 3) con la paleta del frontal.
+ * Los colores salen de /static/nt/tokens.css. No añadas colores fijos.
+ */
+html[data-theme] body { background: var(--bg); color: var(--ink); font-family: var(--font-sans); font-size: 14px; }
+.wrapper, .container, .page-header, .content-main { background: transparent; color: var(--ink); }
+h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); font-weight: 600; color: var(--ink); }
+.page-header { border-bottom-color: var(--line); }
+a, a:hover, a:focus, body a, body a:hover { color: var(--link); }
+::selection { background: var(--highlight); color: var(--ink); }
+:focus-visible { outline: 2px solid transparent; box-shadow: var(--focus-ring); }
+
+.navbar, .navbar-inverse { background: var(--surface); border-color: var(--line); border-top: 0; }
+.navbar-inverse .navbar-brand, .navbar-inverse .navbar-brand:hover, body .navbar-inverse .navbar-brand { color: var(--ink); font-family: var(--font-display); font-weight: 600; }
+.navbar-inverse .navbar-nav > li > a, .navbar-inverse .navbar-nav > li > a:hover { color: var(--ink-muted); background: transparent; }
+.navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus { color: var(--ink); background: var(--surface-hover); }
+
+.breadcrumb { background: var(--surface); border-radius: var(--radius-sm); }
+.breadcrumb > li, .breadcrumb > .active, .breadcrumb li.active a, .breadcrumb > li + li::before { color: var(--ink-muted); }
+
+pre, .prettyprint, pre.prettyprint { background: var(--surface-sunken) !important; border: 1px solid var(--line) !important; border-radius: var(--radius-sm); color: var(--ink); font-family: var(--font-mono); font-size: 13px; }
+.prettyprint span, .prettyprint .pln, .prettyprint .pun, .prettyprint .opn, .prettyprint .clo { color: var(--ink); }
+.prettyprint .str { color: var(--secondary-ink); }
+.prettyprint .kwd, .prettyprint .lit, .prettyprint .tag { color: var(--accent-ink); }
+.prettyprint .atn, .prettyprint .typ, .prettyprint .com { color: var(--ink-muted); }
+.prettyprint b, .response-info b, .meta b { color: var(--ink-muted); }
+
+.btn { border-radius: var(--radius-sm); font-weight: 500; }
+.btn-default, .btn-info { background: var(--surface-raised); border-color: var(--line-strong); color: var(--ink); }
+.btn-default:hover, .btn-default:focus, .btn-info:hover, .btn-info:focus, .btn-default.active, .open > .dropdown-toggle.btn-default { background: var(--surface-hover); border-color: var(--line-strong); color: var(--ink); }
+.btn-primary, body a.btn-primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.btn-primary:hover, .btn-primary:focus { background: var(--accent-hover); border-color: var(--accent-hover); color: var(--on-accent); }
+.btn-danger, .button-form .btn-danger { background: var(--surface-raised); border-color: var(--danger); color: var(--danger); }
+.btn-danger:hover, .btn-danger:focus { background: var(--danger-soft); border-color: var(--danger); color: var(--danger); }
+.btn-warning { background: var(--warning-soft); border-color: var(--warning); color: var(--warning); }
+
+.well, .tab-content, .modal-content { background: var(--surface-raised); border-color: var(--line); color: var(--ink); box-shadow: none; }
+.form-control, select, textarea { background: var(--surface-raised); border: 1px solid var(--line-strong); border-radius: var(--radius-sm); color: var(--ink); box-shadow: none; }
+.form-control:focus { border-color: var(--accent-ink); box-shadow: var(--focus-ring); }
+.control-label, label { color: var(--ink); font-weight: 500; }
+.help-block { color: var(--ink-muted); }
+.nav-tabs { border-bottom-color: var(--line); }
+.nav-tabs > li > a { color: var(--ink-muted); }
+.nav-tabs > li > a:hover { background: var(--surface-hover); border-color: transparent; }
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus { background: var(--surface-raised); border-color: var(--line); border-bottom-color: transparent; color: var(--ink); }
+.dropdown-menu { background: var(--surface-raised); border-color: var(--line); box-shadow: var(--shadow-lg); }
+.dropdown-menu > li > a { color: var(--ink); }
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus { background: var(--surface-hover); color: var(--ink); }
+.pagination > li > a, .pagination > li > span { background: var(--surface-raised); border-color: var(--line); color: var(--ink); }
+.pagination > li > a:hover { background: var(--surface-hover); border-color: var(--line-strong); color: var(--ink); }
+.pagination > .active > a, .pagination > .active > a:hover, .pagination > .active > span { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.pagination > .disabled > a, .pagination > .disabled > span { background: var(--surface); border-color: var(--line); color: var(--ink-muted); }
+.table > thead > tr > th, .table > tbody > tr > td, .table > tbody > tr > th { border-color: var(--line); }
+.alert-danger { background: var(--danger-soft); border-color: var(--danger); color: var(--danger); }
+.alert-success { background: var(--success-soft); border-color: var(--success); color: var(--success); }

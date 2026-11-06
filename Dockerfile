@@ -49,7 +49,7 @@ WORKDIR /code
 # Código (sin .env: está en .dockerignore)
 COPY --chown=app:app . /code/
 
-RUN mkdir -p /code/staticfiles /code/media /code/tmp \
+RUN mkdir -p /code/staticfiles /code/media /code/private /code/tmp \
     && chmod +x /code/entrypoint.sh /code/entrypoint.prod.sh \
     && chown -R app:app /code
 

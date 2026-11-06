@@ -1,0 +1,3 @@
+# Dominios a los que puede salir Ollama: el registro de modelos y el almacenamiento de sus capas
+^registry\.ollama\.ai$
+\.r2\.cloudflarestorage\.com$

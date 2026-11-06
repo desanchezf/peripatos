@@ -1,0 +1,406 @@
+/*
+ * Admin de Django (Jazzmin: Bootstrap 5.3 + AdminLTE 4) con la paleta del frontal.
+ * Los colores salen de /static/nt/tokens.css (frontend/src/styles/tokens.css): aquí solo se
+ * traducen los tokens semánticos a las variables de Bootstrap. No añadas colores fijos.
+ */
+
+/* Variables de Bootstrap. html[data-theme] gana a :root de Bootstrap, y se repiten en cada
+   [data-bs-theme] interior porque la barra lateral de Jazzmin lleva data-bs-theme="dark" fijo */
+html[data-theme],
+html[data-theme] [data-bs-theme] {
+  --bs-body-font-family: var(--font-sans);
+  --bs-font-sans-serif: var(--font-sans);
+  --bs-font-monospace: var(--font-mono);
+  --bs-body-font-size: 14px;
+  --bs-body-line-height: 1.5715;
+  --bs-body-bg: var(--bg);
+  --bs-body-color: var(--ink);
+  --bs-emphasis-color: var(--ink);
+  --bs-heading-color: var(--ink);
+  --bs-secondary-color: var(--ink-muted);
+  --bs-tertiary-color: var(--ink-muted);
+  --bs-secondary-bg: var(--surface);
+  --bs-tertiary-bg: var(--surface-sunken);
+  --bs-border-color: var(--line);
+  --bs-border-color-translucent: var(--line);
+  --bs-highlight-bg: var(--highlight);
+  --bs-highlight-color: var(--ink);
+  --bs-code-color: var(--ink);
+  --bs-border-radius: var(--radius-sm);
+  --bs-border-radius-sm: var(--radius-xs);
+  --bs-border-radius-lg: var(--radius-md);
+  --bs-border-radius-xl: var(--radius-lg);
+  --bs-box-shadow-sm: var(--shadow-sm);
+  --bs-box-shadow: var(--shadow-sm);
+  --bs-box-shadow-lg: var(--shadow-lg);
+  /* Admin nativo de Django (widgets como filter_horizontal o el calendario) */
+  --primary: var(--accent);
+  --secondary: var(--secondary);
+  --primary-fg: var(--on-accent);
+  --body-fg: var(--ink);
+  --body-bg: var(--surface-raised);
+  --body-quiet-color: var(--ink-muted);
+  --body-medium-color: var(--ink-muted);
+  --body-loud-color: var(--ink);
+  --header-color: var(--ink);
+  --header-bg: var(--surface);
+  --header-link-color: var(--ink);
+  --breadcrumbs-fg: var(--ink-muted);
+  --breadcrumbs-link-fg: var(--link);
+  --breadcrumbs-bg: var(--surface);
+  --link-fg: var(--link);
+  --link-hover-color: var(--accent-hover);
+  --link-selected-fg: var(--accent-ink);
+  --hairline-color: var(--line);
+  --border-color: var(--line);
+  --error-fg: var(--danger);
+  --message-success-bg: var(--success-soft);
+  --message-warning-bg: var(--warning-soft);
+  --message-error-bg: var(--danger-soft);
+  --darkened-bg: var(--surface-sunken);
+  --selected-bg: var(--accent-soft);
+  --selected-row: var(--accent-soft);
+  --button-fg: var(--on-accent);
+  --button-bg: var(--accent);
+  --button-hover-bg: var(--accent-hover);
+  --default-button-bg: var(--accent);
+  --default-button-hover-bg: var(--accent-hover);
+  --close-button-bg: var(--surface-sunken);
+  --close-button-hover-bg: var(--surface-hover);
+  --delete-button-bg: var(--danger);
+  --delete-button-hover-bg: var(--danger);
+  --object-tools-fg: var(--ink);
+  --object-tools-bg: var(--surface-raised);
+  --object-tools-hover-bg: var(--surface-hover);
+}
+html[data-theme] [data-bs-theme] { color-scheme: inherit; }
+
+body { font-family: var(--font-sans); background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; }
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, .card-title, .brand-text, .login-logo { font-family: var(--font-display); font-weight: 600; color: var(--ink); }
+a { color: var(--link); }
+a:hover { color: var(--accent-hover); }
+code, kbd, pre, samp { font-family: var(--font-mono); }
+::selection { background: var(--highlight); color: var(--ink); }
+.text-muted, .text-body-secondary, .help, .help-block, .form-text, small.text-muted { color: var(--ink-muted) !important; }
+.text-primary { color: var(--accent-ink) !important; }
+.text-success { color: var(--success) !important; }
+.text-warning { color: var(--warning) !important; }
+.text-danger { color: var(--danger) !important; }
+.text-info { color: var(--secondary-ink) !important; }
+
+/* Fondos de utilidad que Bootstrap marca con !important */
+.bg-body { background-color: var(--bg) !important; }
+.bg-body-secondary { background-color: var(--surface) !important; }
+.bg-body-tertiary { background-color: var(--bg) !important; }
+.bg-primary, .text-bg-primary { background-color: var(--accent) !important; color: var(--on-accent) !important; }
+.bg-success, .text-bg-success { background-color: var(--success-soft) !important; color: var(--success) !important; }
+.bg-warning, .text-bg-warning { background-color: var(--warning-soft) !important; color: var(--warning) !important; }
+.bg-danger, .text-bg-danger { background-color: var(--danger-soft) !important; color: var(--danger) !important; }
+.bg-info, .text-bg-info, .bg-secondary, .text-bg-secondary { background-color: var(--secondary-soft) !important; color: var(--secondary-ink) !important; }
+.shadow, .shadow-sm, .elevation-2 { box-shadow: none !important; }
+
+/* Foco visible con el anillo del Design System */
+:focus-visible,
+.btn:focus-visible,
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus,
+.page-link:focus,
+.nav-link:focus-visible { outline: 2px solid transparent; box-shadow: var(--focus-ring) !important; }
+
+/* Cabecera */
+.app-header.bg-body {
+  background-color: var(--surface) !important;
+  border-bottom: 1px solid var(--line);
+  --bs-navbar-color: var(--ink-muted);
+  --bs-navbar-hover-color: var(--ink);
+  --bs-navbar-active-color: var(--ink);
+  --bs-navbar-brand-color: var(--ink);
+  --bs-navbar-brand-hover-color: var(--ink);
+}
+.app-header .nav-link { color: var(--ink-muted); border-radius: var(--radius-sm); }
+.app-header .nav-link:hover { color: var(--ink); background: var(--surface-hover); }
+
+/* Barra lateral (como .nt-ws-side y .nt-nav del frontal) */
+#jazzy-sidebar.app-sidebar {
+  background-color: var(--surface) !important;
+  border-right: 1px solid var(--line);
+  --lte-sidebar-color: var(--ink);
+  --lte-sidebar-hover-bg: var(--surface-hover);
+  --lte-sidebar-hover-color: var(--ink);
+  --lte-sidebar-active-color: var(--accent-ink);
+  --lte-sidebar-menu-active-bg: var(--accent-soft);
+  --lte-sidebar-menu-active-color: var(--accent-ink);
+  --lte-sidebar-submenu-bg: transparent;
+  --lte-sidebar-submenu-color: var(--ink);
+  --lte-sidebar-submenu-hover-bg: var(--surface-hover);
+  --lte-sidebar-submenu-hover-color: var(--ink);
+  --lte-sidebar-submenu-active-bg: var(--accent-soft);
+  --lte-sidebar-submenu-active-color: var(--accent-ink);
+  --lte-sidebar-header-color: var(--ink-muted);
+}
+#jazzy-sidebar .sidebar-brand { border-bottom: 1px solid var(--line); }
+#jazzy-sidebar .brand-link { color: var(--ink); text-decoration: none; padding-left: var(--space-3); }
+#jazzy-sidebar .brand-image { display: none; }
+/* La stoa del frontal: máscara para que tome el color del tema */
+#jazzy-sidebar .brand-link::before { content: ""; display: inline-block; width: 26px; height: 26px; margin-right: var(--space-2); vertical-align: middle; background-color: var(--accent-ink); -webkit-mask: url("../logo/peripatos.svg") center / contain no-repeat; mask: url("../logo/peripatos.svg") center / contain no-repeat; }
+#jazzy-sidebar .brand-text { font-size: 14px; font-weight: 600 !important; color: var(--ink); }
+#jazzy-sidebar .user-panel { border-bottom: 1px solid var(--line); }
+#jazzy-sidebar .user-panel .info a { color: var(--ink); }
+#jazzy-sidebar .user-profile { color: var(--ink-muted); }
+#jazzy-sidebar .sidebar-menu .nav-link { border-radius: var(--radius-sm); font-size: 13px; font-weight: 500; }
+#jazzy-sidebar .sidebar-menu .nav-link .nav-icon { color: var(--ink-muted); }
+#jazzy-sidebar .sidebar-menu .nav-link.active,
+#jazzy-sidebar .sidebar-menu .nav-link.active .nav-icon { color: var(--accent-ink); background-color: var(--accent-soft); }
+#jazzy-sidebar .sidebar-menu .nav-header { font-size: 11px; line-height: 16px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-muted); }
+
+/* Contenido */
+.app-main, .app-content, .app-content-header { background: var(--bg); }
+.app-footer { background: var(--surface); border-top: 1px solid var(--line); color: var(--ink-muted); }
+.breadcrumb { --bs-breadcrumb-divider-color: var(--ink-muted); --bs-breadcrumb-item-active-color: var(--ink-muted); font-size: 13px; }
+
+/* Tarjetas (.nt-card) */
+.card {
+  --bs-card-bg: var(--surface-raised);
+  --bs-card-color: var(--ink);
+  --bs-card-border-color: var(--line);
+  --bs-card-cap-bg: var(--surface-raised);
+  --bs-card-cap-color: var(--ink);
+  --bs-card-border-radius: var(--radius-md);
+  --bs-card-inner-border-radius: calc(var(--radius-md) - 1px);
+  box-shadow: var(--shadow-sm);
+}
+.card-header { border-bottom: 1px solid var(--line); }
+.card-title { font-size: 15px; line-height: 22px; }
+.card-primary:not(.card-outline) > .card-header,
+.card-secondary:not(.card-outline) > .card-header,
+.card-info:not(.card-outline) > .card-header,
+.card-success:not(.card-outline) > .card-header { background: var(--surface); color: var(--ink); }
+.card-outline { border-top: 3px solid var(--accent) !important; }
+
+/* Tablas */
+.table {
+  --bs-table-bg: transparent;
+  --bs-table-color: var(--ink);
+  --bs-table-border-color: var(--line);
+  --bs-table-striped-bg: var(--surface);
+  --bs-table-striped-color: var(--ink);
+  --bs-table-hover-bg: var(--surface-hover);
+  --bs-table-hover-color: var(--ink);
+  --bs-table-active-bg: var(--accent-soft);
+  --bs-table-active-color: var(--ink);
+}
+.table thead th { font-size: 11px; line-height: 16px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-muted); border-bottom-color: var(--line-strong); }
+.table thead th a { color: inherit; }
+#result_list tbody tr.selected, #result_list tbody tr.selected > * { --bs-table-bg-state: var(--accent-soft); background-color: var(--accent-soft); }
+
+/* Botones (.nt-btn): primario = acento, el resto secundario */
+.btn { font-weight: 500; border-radius: var(--radius-sm); transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease; }
+.btn-primary, .btn-success {
+  --bs-btn-bg: var(--accent);
+  --bs-btn-border-color: var(--accent);
+  --bs-btn-color: var(--on-accent);
+  --bs-btn-hover-bg: var(--accent-hover);
+  --bs-btn-hover-border-color: var(--accent-hover);
+  --bs-btn-hover-color: var(--on-accent);
+  --bs-btn-active-bg: var(--accent-hover);
+  --bs-btn-active-border-color: var(--accent-hover);
+  --bs-btn-active-color: var(--on-accent);
+  --bs-btn-disabled-bg: var(--accent);
+  --bs-btn-disabled-border-color: var(--accent);
+  --bs-btn-disabled-color: var(--on-accent);
+}
+.btn-secondary, .btn-info, .btn-light, .btn-default, .btn-outline-secondary, .btn-outline-primary, .btn-outline-info,
+.btn.addlink, .btn.changelink, .btn.viewlink, .btn-navbar,
+#changelist-search .btn, #changelist-form .actions .btn { /* un solo primario por vista: «Añadir» */
+  --bs-btn-bg: var(--surface-raised);
+  --bs-btn-border-color: var(--line-strong);
+  --bs-btn-color: var(--ink);
+  --bs-btn-hover-bg: var(--surface-hover);
+  --bs-btn-hover-border-color: var(--line-strong);
+  --bs-btn-hover-color: var(--ink);
+  --bs-btn-active-bg: var(--surface-hover);
+  --bs-btn-active-border-color: var(--line-strong);
+  --bs-btn-active-color: var(--ink);
+  --bs-btn-disabled-bg: var(--surface-raised);
+  --bs-btn-disabled-border-color: var(--line-strong);
+  --bs-btn-disabled-color: var(--ink-muted);
+}
+.btn-warning {
+  --bs-btn-bg: var(--warning-soft);
+  --bs-btn-border-color: var(--warning);
+  --bs-btn-color: var(--warning);
+  --bs-btn-hover-bg: var(--warning-soft);
+  --bs-btn-hover-border-color: var(--warning);
+  --bs-btn-hover-color: var(--ink);
+  --bs-btn-active-bg: var(--warning-soft);
+  --bs-btn-active-color: var(--ink);
+}
+.btn-danger, .btn-outline-danger, .deletelink.btn {
+  --bs-btn-bg: var(--surface-raised);
+  --bs-btn-border-color: var(--danger);
+  --bs-btn-color: var(--danger);
+  --bs-btn-hover-bg: var(--danger-soft);
+  --bs-btn-hover-border-color: var(--danger);
+  --bs-btn-hover-color: var(--danger);
+  --bs-btn-active-bg: var(--danger-soft);
+  --bs-btn-active-border-color: var(--danger);
+  --bs-btn-active-color: var(--danger);
+}
+.btn-link { --bs-btn-color: var(--link); --bs-btn-hover-color: var(--accent-hover); }
+
+/* Campos (.nt-field-control) */
+.form-control, .form-select, .input-group-text,
+.vTextField, .vLargeTextField, .vIntegerField, .vDateField, .vTimeField, .vURLField,
+input[type="text"], input[type="password"], input[type="email"], input[type="number"], input[type="search"], input[type="url"],
+select, textarea {
+  background-color: var(--surface-raised);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  color: var(--ink);
+}
+.input-group-text { background-color: var(--surface); color: var(--ink-muted); }
+/* Editar / añadir / quitar / ver junto a los desplegables: los iconos de trazo del frontal
+   (components/iconPaths.ts) en el color del texto, en lugar de los iconos de colores de Django */
+.related-widget-wrapper-link {
+  --nt-icon: none;
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  margin-left: 2px;
+  border-radius: var(--radius-sm);
+  color: var(--ink-muted);
+  vertical-align: middle;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+.related-widget-wrapper-link > img, .related-widget-wrapper-link > i { display: none; }
+.related-widget-wrapper-link::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  background-color: currentColor;
+  -webkit-mask: var(--nt-icon) center / contain no-repeat;
+  mask: var(--nt-icon) center / contain no-repeat;
+}
+.related-widget-wrapper-link:hover { background: var(--surface-hover); color: var(--ink); }
+.related-widget-wrapper-link.delete-related:hover { background: var(--danger-soft); color: var(--danger); }
+.related-widget-wrapper-link:not([href]), .related-widget-wrapper-link.disabled { opacity: .4; pointer-events: none; }
+.change-related { --nt-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'><path d='M4 20h4L19 9l-4-4L4 16z M13.5 6.5l4 4'/></svg>"); }
+.add-related { --nt-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'><path d='M12 5v14 M5 12h14'/></svg>"); }
+.delete-related { --nt-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'><path d='M6.5 6.5l11 11 M17.5 6.5l-11 11'/></svg>"); }
+.view-related { --nt-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'><path d='M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z M12 9a3 3 0 1 0 0 6a3 3 0 1 0 0-6z'/></svg>"); }
+
+/* Campos de texto del formulario a lo ancho: los nombres largos no se cortan */
+form .vTextField, form .vURLField, form .vLargeTextField, form textarea,
+form input.form-control[type="text"], form input.form-control[type="email"], form input.form-control[type="url"] {
+  width: 100% !important;
+  max-width: 720px;
+}
+/* Dentro de un input-group (login) manda el flex de Bootstrap; si no, el icono baja de línea */
+form .input-group > input.form-control { width: 1% !important; max-width: none; }
+.form-control::placeholder, textarea::placeholder, input::placeholder { color: var(--ink-muted); opacity: 1; }
+.form-control:focus, .form-select:focus { background-color: var(--surface-raised); border-color: var(--accent-ink); color: var(--ink); }
+.form-control:disabled, .form-control[readonly], .form-select:disabled { background-color: var(--surface-sunken); color: var(--ink-muted); }
+.form-check-input { background-color: var(--surface-raised); border: 1.5px solid var(--line-strong); }
+.form-check-input:checked { background-color: var(--accent); border-color: var(--accent); }
+.form-group label, .col-form-label, label.required { color: var(--ink); font-weight: 500; font-size: 13px; }
+.errorlist, .errornote, .invalid-feedback { color: var(--danger); }
+.errors .form-control, .form-control.is-invalid { border-color: var(--danger); }
+
+/* Select2 (autocompletado y filtros) */
+.select2-container--default .select2-selection--single,
+.select2-container--default .select2-selection--multiple { background-color: var(--surface-raised); border: 1px solid var(--line-strong); border-radius: var(--radius-sm); }
+.select2-container--default .select2-selection--single .select2-selection__rendered { color: var(--ink); }
+.select2-container--default .select2-selection--multiple .select2-selection__choice { background: var(--secondary-soft); color: var(--secondary-ink); border: 0; border-radius: var(--radius-full); }
+.select2-dropdown { background: var(--surface-raised); border-color: var(--line); color: var(--ink); box-shadow: var(--shadow-lg); }
+.select2-search__field { background: var(--surface-raised); color: var(--ink); }
+.select2-container--default .select2-results__option--highlighted[aria-selected],
+.select2-container--default .select2-results__option--highlighted.select2-results__option--selectable { background: var(--accent-soft); color: var(--accent-ink); }
+.select2-container--default .select2-results__option[aria-selected="true"],
+.select2-container--default .select2-results__option--selected { background: var(--surface-hover); color: var(--ink); }
+
+/* Menús, paginación, modales (lo que flota lleva --shadow-lg) */
+.dropdown-menu {
+  --bs-dropdown-bg: var(--surface-raised);
+  --bs-dropdown-color: var(--ink);
+  --bs-dropdown-border-color: var(--line);
+  --bs-dropdown-divider-bg: var(--line);
+  --bs-dropdown-link-color: var(--ink);
+  --bs-dropdown-link-hover-color: var(--ink);
+  --bs-dropdown-link-hover-bg: var(--surface-hover);
+  --bs-dropdown-link-active-color: var(--accent-ink);
+  --bs-dropdown-link-active-bg: var(--accent-soft);
+  --bs-dropdown-header-color: var(--ink-muted);
+  --bs-dropdown-border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+}
+.pagination {
+  --bs-pagination-color: var(--ink);
+  --bs-pagination-bg: var(--surface-raised);
+  --bs-pagination-border-color: var(--line);
+  --bs-pagination-hover-color: var(--ink);
+  --bs-pagination-hover-bg: var(--surface-hover);
+  --bs-pagination-hover-border-color: var(--line-strong);
+  --bs-pagination-focus-color: var(--ink);
+  --bs-pagination-focus-bg: var(--surface-hover);
+  --bs-pagination-active-color: var(--on-accent);
+  --bs-pagination-active-bg: var(--accent);
+  --bs-pagination-active-border-color: var(--accent);
+  --bs-pagination-disabled-color: var(--ink-muted);
+  --bs-pagination-disabled-bg: var(--surface);
+  --bs-pagination-disabled-border-color: var(--line);
+}
+.modal { --bs-modal-bg: var(--surface-raised); --bs-modal-color: var(--ink); --bs-modal-border-color: var(--line); --bs-modal-border-radius: var(--radius-lg); --bs-modal-box-shadow: var(--shadow-lg); }
+.nav-tabs { --bs-nav-tabs-border-color: var(--line); --bs-nav-tabs-link-active-bg: var(--bg); --bs-nav-tabs-link-active-color: var(--ink); --bs-nav-tabs-link-active-border-color: var(--line); --bs-nav-tabs-link-hover-border-color: transparent; }
+.nav-tabs .nav-link { color: var(--ink-muted); }
+.nav-pills { --bs-nav-pills-link-active-bg: var(--accent-soft); --bs-nav-pills-link-active-color: var(--accent-ink); }
+
+/* Avisos: siempre con palabra, el color refuerza (.nt-badge) */
+.alert { border: 1px solid var(--line); border-radius: var(--radius-md); color: var(--ink); }
+.alert-success { background: var(--success-soft); border-color: var(--success); color: var(--success); }
+.alert-warning { background: var(--warning-soft); border-color: var(--warning); color: var(--warning); }
+.alert-danger, .alert-error { background: var(--danger-soft); border-color: var(--danger); color: var(--danger); }
+.alert-info, .alert-primary, .alert-secondary { background: var(--secondary-soft); border-color: var(--secondary); color: var(--secondary-ink); }
+.alert .btn-close { filter: none; opacity: .7; }
+.callout { background: var(--surface-raised); border: 1px solid var(--line); border-left-width: 4px; border-radius: var(--radius-sm); color: var(--ink); }
+.callout-danger { border-left-color: var(--danger); color: var(--danger); }
+.callout-warning { border-left-color: var(--warning); }
+.callout-success { border-left-color: var(--success); }
+.callout-info { border-left-color: var(--secondary); }
+.badge { font-weight: 500; border-radius: var(--radius-sm); }
+
+/* Selector doble de Django (filter_horizontal: permisos, grupos) */
+.selector select { background: var(--surface-raised); border: 1px solid var(--line-strong); border-radius: var(--radius-sm); color: var(--ink); }
+.selector h2, .selector .selector-available-title, .selector .selector-chosen-title { font-family: var(--font-sans); font-size: 13px; font-weight: 600; color: var(--ink); }
+.selector .selector-filter input { background: var(--surface-raised); border: 1px solid var(--line-strong); color: var(--ink); }
+.selector-chooseall, .selector-clearall, .selector-add, .selector-remove {
+  background-color: var(--surface-raised) !important;
+  border: 1px solid var(--line-strong) !important;
+  border-radius: var(--radius-sm);
+  color: var(--ink) !important;
+  font-weight: 500;
+}
+.selector-chooseall:hover, .selector-clearall:hover, .selector-add:hover, .selector-remove:hover { background-color: var(--surface-hover) !important; }
+.selector-chooseall:disabled, .selector-clearall:disabled, .selector-add:disabled, .selector-remove:disabled,
+.selector-chooseall.disabled, .selector-clearall.disabled { color: var(--ink-muted) !important; opacity: .6; }
+
+/* Filtros de la lista de cambios */
+#changelist-filter, .change-list .search-filter { color: var(--ink); }
+#changelist-filter li.selected a, #changelist-filter a.selected { color: var(--accent-ink); font-weight: 600; }
+
+/* Inicio de sesión */
+.login-page { background: var(--bg) !important; }
+.login-logo, .login-logo a { color: var(--ink); }
+.login-logo img, .login-logo img.logo-light, .login-logo img.logo-dark { display: none !important; }
+.login-logo::before { content: ""; display: block; width: 44px; height: 44px; margin: 0 auto; background-color: var(--accent-ink); -webkit-mask: url("../logo/peripatos.svg") center / contain no-repeat; mask: url("../logo/peripatos.svg") center / contain no-repeat; }
+.login-box .card { border-radius: var(--radius-lg); }
+.login-box-msg { color: var(--ink-muted); }
+
+/* Selector de tema (static/peripatos-admin/admin.js) */
+.pt-admin-theme { display: flex; align-items: center; gap: var(--space-2); padding: 0 var(--space-2); }
+.pt-admin-theme .form-select { width: auto; min-width: 150px; font-size: 13px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0ms !important; animation-duration: 0ms !important; }
+}

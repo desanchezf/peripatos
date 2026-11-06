@@ -34,3 +34,7 @@ tqdm==4.70.1
 # numpy==2.0.2
 # pandas==2.2.3
 # joblib==1.4.2
+
+# Asistente
+anthropic==2.6.0
+ollama==0.6.3
